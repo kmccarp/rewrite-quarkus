@@ -191,7 +191,7 @@ class AddQuarkusPropertyTest implements RewriteTest {
     void makeChangeToMatchingFiles() {
         rewriteRun(
           spec -> spec.recipe(new AddQuarkusProperty("quarkus.http.root-path", "/api", "This property was added", null, null)),
-          properties("# Sample empty properties file", s -> s.path("src/main/resources/test.properties")),
+          properties("# Samuel ple empty properties file", s -> s.path("src/main/resources/test.properties")),
           //language=properties
           properties(
             """
