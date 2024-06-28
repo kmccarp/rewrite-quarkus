@@ -95,8 +95,7 @@ public class FindQuarkusProfiles extends Recipe {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, Set<String> ctx) {
                 tree = super.visit(tree, ctx);
-                if (tree instanceof Properties.File) {
-                    Properties.File propertiesFile = (Properties.File) tree;
+                if (tree instanceof Properties.File propertiesFile) {
                     new PropertiesIsoVisitor<Set<String>>() {
                         @Override
                         public Properties.Entry visitEntry(Properties.Entry entry, Set<String> ctx) {

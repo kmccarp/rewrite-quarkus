@@ -58,20 +58,22 @@ public class UseReactivePanacheMongoEntityBaseUniT extends Recipe {
         private static final JavaParser.Builder<?, ?> parser =
                 JavaParser.fromJavaVersion().dependsOn(
                         Stream.of(
-                                Parser.Input.fromString("" +
-                                                        "package io.smallrye.mutiny;" +
-                                                        "public interface Uni<T> {" +
-                                                        "    Uni<Void> replaceWithVoid() {};" +
-                                                        "}"
+                                Parser.Input.fromString("""
+                                                        package io.smallrye.mutiny;\
+                                                        public interface Uni<T> {\
+                                                            Uni<Void> replaceWithVoid() {};\
+                                                        }\
+                                                        """
                                 ),
-                                Parser.Input.fromString("" +
-                                                        "package io.quarkus.mongodb.panache.reactive;" +
-                                                        "import io.smallrye.mutiny.Uni;" +
-                                                        "public abstract class ReactivePanacheMongoEntityBase {" +
-                                                        "    public <T extends ReactivePanacheMongoEntityBase> Uni<T> persist() {};" +
-                                                        "    public <T extends ReactivePanacheMongoEntityBase> Uni<T> update() {};" +
-                                                        "    public <T extends ReactivePanacheMongoEntityBase> Uni<T> persistOrUpdate() {};" +
-                                                        "}"
+                                Parser.Input.fromString("""
+                                                        package io.quarkus.mongodb.panache.reactive;\
+                                                        import io.smallrye.mutiny.Uni;\
+                                                        public abstract class ReactivePanacheMongoEntityBase {\
+                                                            public <T extends ReactivePanacheMongoEntityBase> Uni<T> persist() {};\
+                                                            public <T extends ReactivePanacheMongoEntityBase> Uni<T> update() {};\
+                                                            public <T extends ReactivePanacheMongoEntityBase> Uni<T> persistOrUpdate() {};\
+                                                        }\
+                                                        """
                                 )
                         ).collect(Collectors.toList())
                 );
@@ -81,7 +83,7 @@ public class UseReactivePanacheMongoEntityBaseUniT extends Recipe {
             if (returnType != null) {
                 List<JavaType> parameterized = returnType.getTypeParameters();
                 if (!parameterized.isEmpty()) {
-                    return TypeUtils.isOfClassType(parameterized.get(0), "java.lang.Void");
+                    return TypeUtils.isOfClassType(parameterized.getFirst(), "java.lang.Void");
                 }
             }
             return false;

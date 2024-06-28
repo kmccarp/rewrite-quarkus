@@ -126,8 +126,8 @@ public class FindQuarkusProperties extends Recipe {
                 String prop = getProperty(getCursor());
                 if (pattern.matcher(prop).find()) {
                     YamlKey newKey = entry.getKey().copyPaste();
-                    if (newKey instanceof Yaml.Scalar) {
-                        newKey = ((Yaml.Scalar) newKey).withValue(prop);
+                    if (newKey instanceof Yaml.Scalar scalar) {
+                        newKey = scalar.withValue(prop);
                     }
                     entries.add(SearchResult.found(entry.copyPaste().withKey(newKey)));
                 }
@@ -201,8 +201,7 @@ public class FindQuarkusProperties extends Recipe {
         int i = 0;
         while (path.hasNext()) {
             Object next = path.next();
-            if (next instanceof Yaml.Mapping.Entry) {
-                Yaml.Mapping.Entry entry = (Yaml.Mapping.Entry) next;
+            if (next instanceof Yaml.Mapping.Entry entry) {
                 if (i++ > 0) {
                     asProperty.insert(0, '.');
                 }

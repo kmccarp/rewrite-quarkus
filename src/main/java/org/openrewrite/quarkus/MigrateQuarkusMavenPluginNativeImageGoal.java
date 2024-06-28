@@ -35,9 +35,11 @@ public class MigrateQuarkusMavenPluginNativeImageGoal extends Recipe {
 
     @Override
     public String getDescription() {
-        return "Migrates the `quarkus-maven-plugin` deprecated `native-image` goal. " +
-                "If the `native-image` goal needs to be removed, this adds `<quarkus.package.type>native</quarkus.package.type>` " +
-                "to the `native` profile `properties` section, given the `native` profile exists in the `pom.xml`.";
+        return """
+                Migrates the `quarkus-maven-plugin` deprecated `native-image` goal. \
+                If the `native-image` goal needs to be removed, this adds `<quarkus.package.type>native</quarkus.package.type>` \
+                to the `native` profile `properties` section, given the `native` profile exists in the `pom.xml`.\
+                """;
     }
 
     @Override
@@ -47,8 +49,8 @@ public class MigrateQuarkusMavenPluginNativeImageGoal extends Recipe {
             public Xml.Document visitDocument(Xml.Document document, ExecutionContext ctx) {
                 FindPlugin.find(document, "io.quarkus", "quarkus-maven-plugin").forEach(plugin ->
                         FindTags.find(plugin, "//executions/execution/goals/goal").forEach(goal -> {
-                            if (goal.getContent() != null && goal.getContent().size() == 1 && goal.getContent().get(0) instanceof Xml.CharData) {
-                                Xml.CharData existingValue = (Xml.CharData) goal.getContent().get(0);
+                            if (goal.getContent() != null && goal.getContent().size() == 1 && goal.getContent().getFirst() instanceof Xml.CharData) {
+                                Xml.CharData existingValue = (Xml.CharData) goal.getContent().getFirst();
                                 if ("native-image".equalsIgnoreCase(existingValue.getText())) {
                                     doAfterVisit(new RemoveContentVisitor<>(goal, true));
                                     doAfterVisit(new AddQuarkusPackageTypePropertyToNativeProfile());
@@ -70,7 +72,7 @@ public class MigrateQuarkusMavenPluginNativeImageGoal extends Recipe {
                     if ("native".equals(profileId)) {
                         // we're now in the correct profile location; time to look at properties
                         Optional<Xml.Tag> maybeProperties = profile.getChild("properties");
-                        if (!maybeProperties.isPresent()) {
+                        if (maybeProperties.isEmpty()) {
                             // properties tag was missing; we'll add it to this profile and re-run the visitor
                             Xml.Tag propertiesTag = Xml.Tag.build("<properties/>");
                             doAfterVisit(new AddToTagVisitor<>(profile, propertiesTag));
@@ -81,7 +83,7 @@ public class MigrateQuarkusMavenPluginNativeImageGoal extends Recipe {
                                     .filter(prop -> "quarkus.package.type".equals(prop.getName()))
                                     .findAny();
 
-                            if (!maybePackagingProperty.isPresent()) {
+                            if (maybePackagingProperty.isEmpty()) {
                                 Xml.Tag newVersionTag = Xml.Tag.build("<quarkus.package.type>native</quarkus.package.type>");
                                 doAfterVisit(new AddToTagVisitor<>(profileProperties, newVersionTag));
                             }

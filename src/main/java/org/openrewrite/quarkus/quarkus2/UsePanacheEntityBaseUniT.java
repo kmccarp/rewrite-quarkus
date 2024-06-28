@@ -36,19 +36,21 @@ public class UsePanacheEntityBaseUniT extends Recipe {
     private static JavaParser.Builder<?, ?> getParser() {
         return JavaParser.fromJavaVersion().dependsOn(
                 Stream.of(
-                        Parser.Input.fromString("" +
-                                                "package io.smallrye.mutiny;" +
-                                                "public interface Uni<T> {" +
-                                                "    Uni<Void> replaceWithVoid() {};" +
-                                                "}"
+                        Parser.Input.fromString("""
+                                                package io.smallrye.mutiny;\
+                                                public interface Uni<T> {\
+                                                    Uni<Void> replaceWithVoid() {};\
+                                                }\
+                                                """
                         ),
-                        Parser.Input.fromString("" +
-                                                "package io.quarkus.hibernate.reactive.panache;" +
-                                                "import io.smallrye.mutiny.Uni;" +
-                                                "public abstract class PanacheEntityBase {" +
-                                                "    public <T extends PanacheEntityBase> Uni<T> persist() {};" +
-                                                "    public <T extends PanacheEntityBase> Uni<T> persistAndFlush() {};" +
-                                                "}"
+                        Parser.Input.fromString("""
+                                                package io.quarkus.hibernate.reactive.panache;\
+                                                import io.smallrye.mutiny.Uni;\
+                                                public abstract class PanacheEntityBase {\
+                                                    public <T extends PanacheEntityBase> Uni<T> persist() {};\
+                                                    public <T extends PanacheEntityBase> Uni<T> persistAndFlush() {};\
+                                                }\
+                                                """
                         )
                 ).collect(Collectors.toList()));
     }
@@ -77,7 +79,7 @@ public class UsePanacheEntityBaseUniT extends Recipe {
             if (returnType != null) {
                 List<JavaType> parameterized = returnType.getTypeParameters();
                 if (!parameterized.isEmpty()) {
-                    return TypeUtils.isOfClassType(parameterized.get(0), "java.lang.Void");
+                    return TypeUtils.isOfClassType(parameterized.getFirst(), "java.lang.Void");
                 }
             }
             return false;

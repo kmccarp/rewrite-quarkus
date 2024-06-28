@@ -64,9 +64,8 @@ public class GrpcServiceAnnotationToGrpcClient extends Recipe {
 
                 a = a.withArguments(ListUtils.map(a.getArguments(), arg -> {
                     Cursor varDecsCursor = getCursor().getParentOrThrow();
-                    J.VariableDeclarations.NamedVariable namedVariable = varDecsCursor.<J.VariableDeclarations>getValue().getVariables().get(0);
-                    if (arg instanceof J.Assignment) {
-                        J.Assignment assignment = (J.Assignment) arg;
+                    J.VariableDeclarations.NamedVariable namedVariable = varDecsCursor.<J.VariableDeclarations>getValue().getVariables().getFirst();
+                    if (arg instanceof J.Assignment assignment) {
                         if (assignment.getVariable() instanceof J.Identifier && assignment.getAssignment() instanceof J.Literal) {
                             J.Identifier assignName = (J.Identifier) assignment.getVariable();
                             if ("value".equals(assignName.getSimpleName())) {
@@ -75,8 +74,8 @@ public class GrpcServiceAnnotationToGrpcClient extends Recipe {
                                 }
                             }
                         }
-                    } else if (arg instanceof J.Literal) {
-                        if (shouldRemoveArgument(namedVariable, (J.Literal) arg)) {
+                    } else if (arg instanceof J.Literal literal) {
+                        if (shouldRemoveArgument(namedVariable, literal)) {
                             return null;
                         }
                     }

@@ -55,10 +55,12 @@ public class DeleteQuarkusProperty extends Recipe {
     Boolean deleteFromAllProfiles;
 
     @Option(displayName = "Optional list of file path matcher",
-            description = "Each value in this list represents a glob expression that is used to match which files will " +
-                          "be modified. If this value is not present, this recipe will query the execution context for " +
-                          "reasonable defaults. (\"**/application.yml\", \"**/application.yaml\", " +
-                          "\"**/application.properties\" and \"**/META-INF/microprofile-config.properties\".",
+            description = """
+                          Each value in this list represents a glob expression that is used to match which files will \
+                          be modified. If this value is not present, this recipe will query the execution context for \
+                          reasonable defaults. ("**/application.yml", "**/application.yaml", \
+                          "**/application.properties" and "**/META-INF/microprofile-config.properties".\
+                          """,
             required = false,
             example = "[\"**/application.yaml\"]")
     @Nullable

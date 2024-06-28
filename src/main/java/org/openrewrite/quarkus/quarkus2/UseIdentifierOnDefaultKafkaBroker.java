@@ -55,10 +55,12 @@ public class UseIdentifierOnDefaultKafkaBroker extends Recipe {
                         .javaParser(JavaParser.fromJavaVersion()
                                 .dependsOn(singletonList(
                                                 Parser.Input.fromString(
-                                                        "package io.smallrye.common.annotation;\n" +
-                                                        "public interface Identifier {\n" +
-                                                        "    String value();\n" +
-                                                        "}"
+                                                        """
+                                                        package io.smallrye.common.annotation;
+                                                        public interface Identifier {
+                                                            String value();
+                                                        }\
+                                                        """
                                                 )
                                         )
                                 ))

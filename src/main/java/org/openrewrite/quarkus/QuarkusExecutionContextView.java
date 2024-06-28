@@ -37,8 +37,8 @@ public class QuarkusExecutionContextView extends DelegatingExecutionContext {
     }
 
     public static QuarkusExecutionContextView view(ExecutionContext ctx) {
-        if (ctx instanceof QuarkusExecutionContextView) {
-            return (QuarkusExecutionContextView) ctx;
+        if (ctx instanceof QuarkusExecutionContextView view) {
+            return view;
         }
         return new QuarkusExecutionContextView(ctx);
     }

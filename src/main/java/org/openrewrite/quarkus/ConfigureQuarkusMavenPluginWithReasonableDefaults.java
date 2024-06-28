@@ -55,7 +55,7 @@ public class ConfigureQuarkusMavenPluginWithReasonableDefaults extends Recipe {
 
             FindPlugin.find(document, "io.quarkus", "quarkus-maven-plugin").forEach(plugin -> {
                 Optional<Xml.Tag> maybeExtensions = plugin.getChild("extensions");
-                if (!maybeExtensions.isPresent()) {
+                if (maybeExtensions.isEmpty()) {
                     Xml.Tag extensionsTag = Xml.Tag.build("<extensions>true</extensions>");
                     doAfterVisit(new AddToTagVisitor<>(plugin, extensionsTag));
                 } else {
